@@ -15,10 +15,22 @@ jobs:
         with:
           python-version: "3.11"
 
+      # Troca o Java padrão (11) pelo 17, exigido pelo Android SDK / Gradle
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Conferir versão do Java
+        run: |
+          java -version
+          javac -version
+          echo "JAVA_HOME=$JAVA_HOME"
+
       - name: Dependências do sistema
         run: |
           sudo apt-get update
-          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool \
+          sudo apt-get install -y git zip unzip autoconf libtool \
             pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 \
             cmake libffi-dev libssl-dev automake ccache
 
