@@ -21,7 +21,9 @@ fullscreen = 0
 android.permissions = android.permission.READ_EXTERNAL_STORAGE,android.permission.READ_MEDIA_VIDEO
 
 android.api = 33
-android.minapi = 24
+# Android 5.1.1 = API 22 (suporta Android 5.1.1 ou superior)
+android.minapi = 22
+android.ndk_api = 22
 android.ndk = 25b
 android.accept_sdk_license = True
 
