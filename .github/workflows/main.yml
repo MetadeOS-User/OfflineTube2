@@ -1,0 +1,43 @@
+name: Build OfflineTube APK
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Dependências do sistema
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool \
+            pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 \
+            cmake libffi-dev libssl-dev automake ccache
+
+      - name: Instalar Buildozer
+        run: pip install --upgrade buildozer "cython<3" virtualenv
+
+      - name: Cache do Buildozer
+        uses: actions/cache@v4
+        with:
+          path: |
+            .buildozer
+            ~/.buildozer
+          key: buildozer-${{ hashFiles('buildozer.spec') }}
+
+      - name: Compilar APK (32 + 64 bits)
+        run: buildozer -v android debug
+
+      - name: Publicar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OfflineTube-apk
+          path: bin/*.apk
